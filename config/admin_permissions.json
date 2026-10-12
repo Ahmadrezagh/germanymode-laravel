@@ -1,0 +1,481 @@
+[
+  {
+    "key": "menu_fulldastresi",
+    "title": "دسترسی کامل",
+    "permissions": [
+      {
+        "key": "menu_fulldastresi",
+        "title": "دسترسی کامل به همه بخش‌ها"
+      }
+    ]
+  },
+  {
+    "key": "ایجاد کالا",
+    "title": "ایجاد کالا",
+    "permissions": [
+      {
+        "key": "creat_shop_darjkala",
+        "title": "درج کالا"
+      },
+      {
+        "key": "creat_shop_jastuser",
+        "title": "دسترسی به کل محتوای ایجاد کالا"
+      },
+      {
+        "key": "creat_shop_edite",
+        "title": "ویرایش کالا"
+      },
+      {
+        "key": "creat_shop_sherch",
+        "title": "درج تگ جستجو کالا"
+      },
+      {
+        "key": "creat_shop_dell",
+        "title": "حذف کالا"
+      },
+      {
+        "key": "creat_shop_chart",
+        "title": "ویرایش نمودار قیمت"
+      },
+      {
+        "key": "creat_shop_darj_pol",
+        "title": "درج قیمت کالا"
+      },
+      {
+        "key": "creat_shop_edite_pol",
+        "title": "ویرایش قیمت کالا"
+      },
+      {
+        "key": "creat_shop_dell_pol",
+        "title": "حذف قیمت کالا"
+      }
+    ]
+  },
+  {
+    "key": "سفارشات انجام شده",
+    "title": "سفارشات انجام شده",
+    "permissions": [
+      {
+        "key": "anjam_shop_viwe",
+        "title": "نمایش سفارشات"
+      },
+      {
+        "key": "anjam_shop_factor",
+        "title": "نمایش فاکتور"
+      },
+      {
+        "key": "anjam_shop_tarakonesh",
+        "title": "تراکنش ها"
+      },
+      {
+        "key": "anjam_shop_rad",
+        "title": "عدم تایید سفارش"
+      },
+      {
+        "key": "anjam_shop_dell",
+        "title": "حذف سفارش"
+      }
+    ]
+  },
+  {
+    "key": "آخرین سفارشات",
+    "title": "آخرین سفارشات",
+    "permissions": [
+      {
+        "key": "end_shop_viwe",
+        "title": "نمایش سفارشات"
+      },
+      {
+        "key": "end_shop_factor",
+        "title": "نمایش فاکتور"
+      },
+      {
+        "key": "end_shop_tarakonesh",
+        "title": "تراکنش ها"
+      },
+      {
+        "key": "end_shop_taeed",
+        "title": "تایید سفارش"
+      },
+      {
+        "key": "end_shop_send",
+        "title": "ارسال سفارش"
+      },
+      {
+        "key": "end_shop_rad",
+        "title": "عدم تایید سفارش"
+      },
+      {
+        "key": "end_shop_dell",
+        "title": "حذف سفارش"
+      }
+    ]
+  },
+  {
+    "key": "مرتب سازی بخشهای برگزیده",
+    "title": "مرتب سازی بخشهای  برگزیده",
+    "permissions": [
+      {
+        "key": "shop_bargozideh",
+        "title": "مرتب سازی کالای برگزیده"
+      },
+      {
+        "key": "shop_takhfif",
+        "title": "مرتب سازی کالای تخفیف ویژه"
+      }
+    ]
+  },
+  {
+    "key": "ویرایش سریع کالا ها",
+    "title": "ویرایش سریع کالا ها",
+    "permissions": [
+      {
+        "key": "arshiv_virayeshsareshop",
+        "title": "ویرایش سریع کالا ها"
+      }
+    ]
+  },
+  {
+    "key": "آماده سازی فروشگاه",
+    "title": "آماده سازی فروشگاه",
+    "permissions": [
+      {
+        "key": "shop_ijad_anbar",
+        "title": "ایجاد انبار"
+      },
+      {
+        "key": "shop_ijad_berandha",
+        "title": "ایجاد شرکت های سازنده (برندها)"
+      },
+      {
+        "key": "shop_ijad_creat_goroh",
+        "title": "ایجاد گروهای کالا"
+      },
+      {
+        "key": "shop_ijad_zir_grop",
+        "title": "ایجاد زیر گروهای کالا"
+      },
+      {
+        "key": "shop_ijad_serch",
+        "title": "تنظیمات جستجو ( تگهای فروشگاه)"
+      },
+      {
+        "key": "shop_ijad_takhfif",
+        "title": "ایجاد تخفیف"
+      },
+      {
+        "key": "shop_ijad_hediye",
+        "title": "ایجاد بسته بندی ها برای هدیه"
+      },
+      {
+        "key": "shop_ijad_bank",
+        "title": "ایجاد بانک های واریز دستی"
+      }
+    ]
+  },
+  {
+    "key": "دسترسی به انبار",
+    "title": "دسترسی به انبار",
+    "permissions": [
+      {
+        "key": "creat_shop_7778_newkala_anbar",
+        "title": "انبار تست"
+      },
+      {
+        "key": "creat_shop_7782_newkala_anbar",
+        "title": "برقی آشپزخانه"
+      },
+      {
+        "key": "creat_shop_7819_newkala_anbar",
+        "title": "برقی خانگی"
+      },
+      {
+        "key": "creat_shop_7830_newkala_anbar",
+        "title": "لباس زنانه"
+      },
+      {
+        "key": "creat_shop_7844_newkala_anbar",
+        "title": "کفش زنانه"
+      },
+      {
+        "key": "creat_shop_7861_newkala_anbar",
+        "title": "کیف زنانه"
+      },
+      {
+        "key": "creat_shop_7886_newkala_anbar",
+        "title": "زیور آلات"
+      },
+      {
+        "key": "creat_shop_7939_newkala_anbar",
+        "title": "ساعت"
+      },
+      {
+        "key": "creat_shop_7972_newkala_anbar",
+        "title": "عینک"
+      },
+      {
+        "key": "creat_shop_8052_newkala_anbar",
+        "title": "کتانی"
+      },
+      {
+        "key": "creat_shop_8197_newkala_anbar",
+        "title": "اسکوتر"
+      },
+      {
+        "key": "creat_shop_8198_newkala_anbar",
+        "title": "بهداشتی برقی"
+      },
+      {
+        "key": "creat_shop_8211_newkala_anbar",
+        "title": "کوهنوردی"
+      },
+      {
+        "key": "creat_shop_8253_newkala_anbar",
+        "title": "لباس مردانه"
+      },
+      {
+        "key": "creat_shop_8306_newkala_anbar",
+        "title": "ارایشی"
+      },
+      {
+        "key": "creat_shop_8496_newkala_anbar",
+        "title": "ابزار الات"
+      },
+      {
+        "key": "creat_shop_8531_newkala_anbar",
+        "title": "بازی رایانه ای"
+      },
+      {
+        "key": "creat_shop_8573_newkala_anbar",
+        "title": "لپ تاپ"
+      },
+      {
+        "key": "creat_shop_8858_newkala_anbar",
+        "title": "کفش مردانه"
+      },
+      {
+        "key": "creat_shop_8903_newkala_anbar",
+        "title": "لباس نوزاد"
+      },
+      {
+        "key": "creat_shop_9480_newkala_anbar",
+        "title": "طبی و سلامت"
+      },
+      {
+        "key": "creat_shop_9548_newkala_anbar",
+        "title": "گوشی موبایل"
+      },
+      {
+        "key": "creat_shop_14646_newkala_anbar",
+        "title": "مواد غذایی"
+      },
+      {
+        "key": "creat_shop_15362_newkala_anbar",
+        "title": "حیوانات خانگی"
+      },
+      {
+        "key": "creat_shop_15781_newkala_anbar",
+        "title": "سگ"
+      },
+      {
+        "key": "creat_shop_16644_newkala_anbar",
+        "title": "اسباب بازی"
+      },
+      {
+        "key": "creat_shop_18137_newkala_anbar",
+        "title": "ماشین الات"
+      },
+      {
+        "key": "creat_shop_18435_newkala_anbar",
+        "title": "سرویس خانه"
+      },
+      {
+        "key": "creat_shop_22140_newkala_anbar",
+        "title": "gamazon"
+      },
+      {
+        "key": "creat_shop_25684_newkala_anbar",
+        "title": "انبار خالی"
+      }
+    ]
+  },
+  {
+    "key": "گروه و زیر گروه فروشگاهی",
+    "title": "گروه و زیر گروه فروشگاهی",
+    "permissions": []
+  },
+  {
+    "key": "ویرایش کاربری",
+    "title": "ویرایش کاربری",
+    "permissions": [
+      {
+        "key": "admin_edite_profile_pas",
+        "title": "تغییر رمز عبور"
+      },
+      {
+        "key": "admin_edite_profile_all",
+        "title": "تغییر اطلاعات کاربری"
+      }
+    ]
+  },
+  {
+    "key": "نظرسنجی",
+    "title": "نظرسنجی",
+    "permissions": [
+      {
+        "key": "poll_adding",
+        "title": "درج نظر سنجی"
+      },
+      {
+        "key": "poll_dell",
+        "title": "حذف نظر سنجی"
+      },
+      {
+        "key": "poll_edite",
+        "title": "ویرایش نظر سنجی"
+      },
+      {
+        "key": "poll_amar",
+        "title": "نمایش آمار نظرسنجی"
+      }
+    ]
+  },
+  {
+    "key": "ابزارهای سایت",
+    "title": "ابزارهای سایت",
+    "permissions": [
+      {
+        "key": "template",
+        "title": "مدیریت قالب ها"
+      },
+      {
+        "key": "hamkaryfrosh",
+        "title": "همکاری در فروش"
+      },
+      {
+        "key": "signup",
+        "title": "فرم ساز عضویت"
+      },
+      {
+        "key": "profile",
+        "title": "پروفایل ساز کاربران"
+      },
+      {
+        "key": "news_bargozide",
+        "title": "اخبار برگزیده"
+      },
+      {
+        "key": "form_builder",
+        "title": "فرم ساز"
+      },
+      {
+        "key": "setting_portal",
+        "title": "تنظیمات سایت"
+      },
+      {
+        "key": "visit",
+        "title": "آمار سایت"
+      },
+      {
+        "key": "tozihat_meno",
+        "title": "توضیحات منو(سفارشی)"
+      }
+    ]
+  },
+  {
+    "key": "مدیریت کاربران",
+    "title": "مدیریت کاربران",
+    "permissions": [
+      {
+        "key": "user_viwe",
+        "title": "نمایش کاربران"
+      },
+      {
+        "key": "user_vorod",
+        "title": "ورود به کاربری"
+      },
+      {
+        "key": "user_darj",
+        "title": "درج کاربر جدید"
+      },
+      {
+        "key": "user_block",
+        "title": "مسدود کردن کاربران"
+      },
+      {
+        "key": "user_edite",
+        "title": "ویرایش کاربران"
+      },
+      {
+        "key": "user_dell",
+        "title": "حذف کاربران"
+      }
+    ]
+  },
+  {
+    "key": "مدیریت منو",
+    "title": "مدیریت منو",
+    "permissions": [
+      {
+        "key": "_menu_menudastresi",
+        "title": "دسترسی مدیریت منو ها"
+      }
+    ]
+  },
+  {
+    "key": "مدیریت فایل ها",
+    "title": "مدیریت فایل ها",
+    "permissions": [
+      {
+        "key": "upload_dell",
+        "title": "حذف فایل ها"
+      },
+      {
+        "key": "upload_jabejayi",
+        "title": "جابجایی فایل"
+      },
+      {
+        "key": "upload_copy",
+        "title": "کپی فایل ها"
+      },
+      {
+        "key": "upload_send_file",
+        "title": "ارسال فایل به سرور"
+      },
+      {
+        "key": "upload_rename",
+        "title": "تغییر نام فایل ها"
+      },
+      {
+        "key": "upload_directory",
+        "title": "ایجاد شاخه"
+      },
+      {
+        "key": "upload_edit_pohoto_utab",
+        "title": "ویرایشگر آنلاین تصویر"
+      }
+    ]
+  },
+  {
+    "key": "دسترسی نظرات",
+    "title": "دسترسی نظرات",
+    "permissions": [
+      {
+        "key": "comment_taeed",
+        "title": "تایید نظرات"
+      },
+      {
+        "key": "comment_rad",
+        "title": "رد نظرات"
+      },
+      {
+        "key": "comment_dell",
+        "title": "حذف نظرات"
+      },
+      {
+        "key": "comment_pasokh",
+        "title": "پاسخ به نظرات"
+      }
+    ]
+  }
+]
