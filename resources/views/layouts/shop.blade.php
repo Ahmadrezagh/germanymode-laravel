@@ -9,9 +9,9 @@
 </head>
 <body>
 @php
-    $megaCategories = $megaCategories ?? \App\Models\Category::megaMenuTree();
-    $siteStories = isset($stories) ? $stories : \App\Models\Story::query()->where('is_active', true)->orderBy('sort_order')->get();
-    $cartCount = \App\Support\Cart::count();
+    $megaCategories = $megaCategories ?? \App\Domains\Catalog\Models\Category::megaMenuTree();
+    $siteStories = isset($stories) ? $stories : \App\Domains\Marketing\Models\Story::query()->where('is_active', true)->orderBy('sort_order')->get();
+    $cartCount = \App\Domains\Orders\Support\Cart::count();
 @endphp
 
 <div class="announce">

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
+/**
+ * @deprecated Use \App\Shared\Http\Controller instead.
+ */
+abstract class Controller extends \App\Shared\Http\Controller
 {
-    //
 }

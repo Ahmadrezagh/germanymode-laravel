@@ -7,8 +7,8 @@
 @php
     $gallery = $product->galleryUrlsResolved();
     $main = $gallery[0] ?? $product->image;
-    $shortMeta = \App\Models\Product::extractAmazonMeta($product->short_description);
-    $specsMeta = \App\Models\Product::extractAmazonMeta($product->specifications);
+    $shortMeta = \App\Domains\Catalog\Models\Product::extractAmazonMeta($product->short_description);
+    $specsMeta = \App\Domains\Catalog\Models\Product::extractAmazonMeta($product->specifications);
     $specsHasAmazon = $specsMeta['price'] || $specsMeta['url'];
     $shortHasAmazon = $shortMeta['price'] || $shortMeta['url'];
     // If specs already shows the Amazon card, don't repeat it above.
@@ -60,7 +60,7 @@
                 @if($product->oldPriceNumber())
                     <div class="ork-price-old">{{ $product->oldPriceNumber() }} تومان</div>
                     <div class="ork-discount-badge">
-                        {{ round((1 - $product->price / max($product->price_without_discount, 1)) * 100) }}٪ تخفیف
+                        {{ round((1 - $product->price / max((int) $product->regular_price, 1)) * 100) }}٪ تخفیف
                     </div>
                 @endif
             @else

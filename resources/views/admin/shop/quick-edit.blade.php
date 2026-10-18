@@ -40,8 +40,8 @@
                 <tr>
                     <th>تصویر</th>
                     <th>عنوان</th>
-                    <th>قیمت</th>
-                    <th>قبل تخفیف</th>
+                    <th>قیمت تخفیف‌خورده</th>
+                    <th>قیمت عادی</th>
                     <th>وضعیت</th>
                     <th>دسته</th>
                 </tr>
@@ -58,10 +58,10 @@
                             <input class="shop-input" type="text" name="products[{{ $product->id }}][title]" value="{{ $product->title }}">
                         </td>
                         <td style="min-width:120px">
-                            <input class="shop-input" type="number" name="products[{{ $product->id }}][price]" value="{{ $product->price }}">
+                            <input class="shop-input" type="number" name="products[{{ $product->id }}][discounted_price]" value="{{ $product->discounted_price }}">
                         </td>
                         <td style="min-width:120px">
-                            <input class="shop-input" type="number" name="products[{{ $product->id }}][price_without_discount]" value="{{ $product->price_without_discount }}">
+                            <input class="shop-input" type="number" name="products[{{ $product->id }}][regular_price]" value="{{ $product->regular_price }}">
                         </td>
                         <td style="min-width:110px">
                             <select class="shop-select" name="products[{{ $product->id }}][status]">

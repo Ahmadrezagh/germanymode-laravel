@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Domains\Identity\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -33,10 +33,12 @@ class CatalogSeeder extends Seeder
         $source->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         DB::statement('PRAGMA foreign_keys = OFF');
+        DB::table('mediables')->delete();
+        DB::table('media')->delete();
         DB::table('product_models')->delete();
         DB::table('products')->delete();
         DB::table('categories')->delete();
-        DB::statement('DELETE FROM sqlite_sequence WHERE name IN ("categories","products","product_models")');
+        DB::statement('DELETE FROM sqlite_sequence WHERE name IN ("categories","products","product_models","media","mediables")');
 
         $now = now()->toDateTimeString();
 
@@ -56,24 +58,17 @@ class CatalogSeeder extends Seeder
         }
 
         $products = $source->query(
-            'SELECT id, title, short_description, gallery_urls, price_without_discount, price, specifications, sitemap_id, category_id FROM products ORDER BY id'
+            'SELECT id, title, short_description, regular_price, discounted_price, specifications, sitemap_id, category_id FROM products ORDER BY id'
         )->fetchAll(\PDO::FETCH_ASSOC);
 
         $productRows = [];
         foreach ($products as $row) {
-            $gallery = $row['gallery_urls'];
-            if ($gallery && ! json_validate($gallery)) {
-                $decoded = json_decode($gallery, true);
-                $gallery = json_encode(is_array($decoded) ? $decoded : [], JSON_UNESCAPED_UNICODE);
-            }
-
             $productRows[] = [
                 'id' => (int) $row['id'],
                 'title' => $row['title'],
                 'short_description' => $row['short_description'],
-                'gallery_urls' => $gallery ?: '[]',
-                'price_without_discount' => $row['price_without_discount'],
-                'price' => (int) ($row['price'] ?? 0),
+                'regular_price' => $row['regular_price'],
+                'discounted_price' => (int) ($row['discounted_price'] ?? 0),
                 'specifications' => $row['specifications'],
                 'sitemap_id' => $row['sitemap_id'],
                 'category_id' => $row['category_id'] !== null ? (int) $row['category_id'] : null,
@@ -83,6 +78,25 @@ class CatalogSeeder extends Seeder
         }
         foreach (array_chunk($productRows, 50) as $chunk) {
             DB::table('products')->insert($chunk);
+        }
+
+        $media = $source->query('SELECT id, title, path FROM media ORDER BY id')->fetchAll(\PDO::FETCH_ASSOC);
+        foreach (array_chunk($media, 100) as $chunk) {
+            DB::table('media')->insert(array_map(fn ($row) => [
+                'id' => (int) $row['id'],
+                'title' => $row['title'],
+                'path' => $row['path'],
+            ], $chunk));
+        }
+
+        $mediables = $source->query('SELECT id, media_id, model_id, model_type FROM mediables ORDER BY id')->fetchAll(\PDO::FETCH_ASSOC);
+        foreach (array_chunk($mediables, 200) as $chunk) {
+            DB::table('mediables')->insert(array_map(fn ($row) => [
+                'id' => (int) $row['id'],
+                'media_id' => (int) $row['media_id'],
+                'model_id' => (int) $row['model_id'],
+                'model_type' => $row['model_type'],
+            ], $chunk));
         }
 
         $models = $source->query('SELECT product_id, color, model FROM product_models ORDER BY id')->fetchAll(\PDO::FETCH_ASSOC);
@@ -103,9 +117,11 @@ class CatalogSeeder extends Seeder
         DB::statement('PRAGMA foreign_keys = ON');
 
         $this->command?->info(sprintf(
-            'Imported %d categories, %d products, %d models. Admin: admin@germanymode.com / admin123',
+            'Imported %d categories, %d products, %d media, %d mediables, %d models. Admin: admin@germanymode.com / admin123',
             count($categoryRows),
             count($productRows),
+            count($media),
+            count($mediables),
             count($modelRows)
         ));
     }

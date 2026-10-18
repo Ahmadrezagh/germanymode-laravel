@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\AdminAccessLevel;
-use App\Models\User;
+use App\Domains\Identity\Models\AdminAccessLevel;
+use App\Domains\Identity\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

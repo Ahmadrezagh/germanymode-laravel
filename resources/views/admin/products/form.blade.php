@@ -237,12 +237,12 @@
             <h2 class="product-panel-title">تخفیف ویژه</h2>
             <div class="shop-grid-2">
                 <div>
-                    <label class="shop-label">قیمت (تومان)</label>
-                    <input class="shop-input" type="number" name="price" value="{{ old('price', $product->price) }}" min="0">
+                    <label class="shop-label">قیمت با تخفیف (تومان)</label>
+                    <input class="shop-input" type="number" name="discounted_price" value="{{ old('discounted_price', $product->discounted_price) }}" min="0">
                 </div>
                 <div>
-                    <label class="shop-label">قیمت قبل تخفیف</label>
-                    <input class="shop-input" type="number" name="price_without_discount" value="{{ old('price_without_discount', $product->price_without_discount) }}" min="0">
+                    <label class="shop-label">قیمت عادی (تومان)</label>
+                    <input class="shop-input" type="number" name="regular_price" value="{{ old('regular_price', $product->regular_price) }}" min="0">
                 </div>
                 <div>
                     <label class="shop-label">تاریخ انقضا تخفیف</label>

@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Brand;
-use App\Models\Product;
-use App\Models\Warehouse;
+use App\Domains\Catalog\Models\Brand;
+use App\Domains\Catalog\Models\Product;
+use App\Domains\Catalog\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
 class ShopMetaSeeder extends Seeder
@@ -44,11 +44,11 @@ class ShopMetaSeeder extends Seeder
             'status' => 'موجود',
         ]);
 
-        Product::query()->where('price', '>', 0)->whereColumn('price_without_discount', '>', 'price')
+        Product::query()->whereEffectivePriceGreaterThan(0)->whereColumn('regular_price', '>', 'discounted_price')->where('discounted_price', '>', 0)
             ->limit(40)
             ->update(['is_special_discount' => true]);
 
-        Product::query()->where('price', '>', 0)->latest('id')->limit(30)
+        Product::query()->whereEffectivePriceGreaterThan(0)->latest('id')->limit(30)
             ->update(['is_featured' => true]);
     }
 }

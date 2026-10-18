@@ -2,20 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-class AdminAuthenticate
+/**
+ * @deprecated Use \App\Domains\Identity\Http\Middleware\AdminAuthenticate instead.
+ */
+class AdminAuthenticate extends \App\Domains\Identity\Http\Middleware\AdminAuthenticate
 {
-    public function handle(Request $request, Closure $next): Response
-    {
-        $user = $request->user();
-
-        if (! $user || ! $user->is_admin) {
-            return redirect()->route('admin.login')->with('error', 'لطفا وارد پنل مدیریت شوید.');
-        }
-
-        return $next($request);
-    }
 }
