@@ -27,3 +27,20 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Python
+*.py
+.venv/
+venv/
+env/
+environment/
+__pycache__/
+
+# Large local assets / DB
+/assets/
+/public/assets/
+assets/
+app.db
+app.db-shm
+app.db-wal
+*.db

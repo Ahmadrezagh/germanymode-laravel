@@ -4,7 +4,7 @@ namespace App\Shared\Support;
 
 class MediaUrl
 {
-    public const BASE = 'https://panel123456.germanymode.com';
+    public const BASE = 'https://germany.ultimatesoft.ir';
 
     public static function url(?string $path): ?string
     {

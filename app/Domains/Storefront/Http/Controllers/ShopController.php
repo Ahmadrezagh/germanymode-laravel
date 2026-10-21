@@ -12,6 +12,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use Elastic\Elasticsearch\ClientBuilder;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
+use Throwable;
+
+
 class ShopController extends Controller
 {
     public function home(): View
@@ -160,58 +166,244 @@ class ShopController extends Controller
         return view('shop.product', compact('product', 'related', 'categories', 'stories'));
     }
 
-    public function search(Request $request): View
-    {
-        $q = trim((string) $request->get('q', ''));
+    
+public function search(Request $request): View
+{
+    $q = trim((string) $request->get('q', ''));
+    $perPage = 24;
+    $page = LengthAwarePaginator::resolveCurrentPage();
 
+    if ($q === '') {
         $products = Product::query()
             ->with('media')
-            ->when($q !== '', function ($query) use ($q) {
-                $query->where('title', 'like', "%{$q}%")
-                    ->orWhere('short_description', 'like', "%{$q}%");
-            })
             ->latest('id')
-            ->paginate(24)
+            ->paginate($perPage)
             ->appends(['q' => $q]);
+    } else {
+        try {
+            $offset = ($page - 1) * $perPage;
 
-        $categories = Category::query()->whereNull('parent_id')->orderBy('name')->get();
-        $stories = collect();
+            $result = $this->searchProductsInElasticsearch(
+                $q,
+                $offset,
+                $perPage
+            );
 
-        return view('shop.search', compact('products', 'categories', 'q', 'stories'));
+            $ids = $result['ids'];
+            $total = $result['total'];
+
+            $items = collect();
+
+            if ($ids !== []) {
+                $productsById = Product::query()
+                    ->with('media')
+                    ->whereIn('id', $ids)
+                    ->get()
+                    ->keyBy(fn (Product $product) => (string) $product->id);
+
+                // Preserve Elasticsearch relevance order.
+                $items = collect($ids)
+                    ->map(fn ($id) => $productsById->get((string) $id))
+                    ->filter()
+                    ->values();
+            }
+
+            $products = new LengthAwarePaginator(
+                $items,
+                $total,
+                $perPage,
+                $page,
+                [
+                    'path' => $request->url(),
+                    'query' => $request->query(),
+                ]
+            );
+
+            $products->appends(['q' => $q]);
+        } catch (Throwable $e) {
+            Log::warning('Elasticsearch product search failed.', [
+                'query' => $q,
+                'exception' => $e->getMessage(),
+            ]);
+
+            // Keep the storefront working if Elasticsearch is unavailable.
+            $products = Product::query()
+                ->with('media')
+                ->where(function ($query) use ($q) {
+                    $query->where('title', 'like', "%{$q}%")
+                        ->orWhere(
+                            'short_description',
+                            'like',
+                            "%{$q}%"
+                        );
+                })
+                ->latest('id')
+                ->paginate($perPage)
+                ->appends(['q' => $q]);
+        }
     }
 
-    public function suggest(Request $request): JsonResponse
-    {
-        $q = trim((string) $request->get('q', ''));
+    $categories = Category::query()
+        ->whereNull('parent_id')
+        ->orderBy('name')
+        ->get();
 
-        if (mb_strlen($q) < 2) {
-            return response()->json([
-                'q' => $q,
-                'items' => [],
-                'more_url' => route('shop.search', ['q' => $q]),
-            ]);
+    $stories = collect();
+
+    return view(
+        'shop.search',
+        compact('products', 'categories', 'q', 'stories')
+    );
+}
+
+public function suggest(Request $request): JsonResponse
+{
+    $q = trim((string) $request->get('q', ''));
+
+    if (mb_strlen($q) < 2) {
+        return response()->json([
+            'q' => $q,
+            'items' => [],
+            'more_url' => route('shop.search', ['q' => $q]),
+        ]);
+    }
+
+    try {
+        $result = $this->searchProductsInElasticsearch($q, 0, 5);
+        $ids = $result['ids'];
+
+        $products = collect();
+
+        if ($ids !== []) {
+            $productsById = Product::query()
+                ->with('media')
+                ->whereIn('id', $ids)
+                ->get()
+                ->keyBy(fn (Product $product) => (string) $product->id);
+
+            // Preserve Elasticsearch relevance order.
+            $products = collect($ids)
+                ->map(fn ($id) => $productsById->get((string) $id))
+                ->filter()
+                ->values();
         }
+    } catch (Throwable $e) {
+        Log::warning('Elasticsearch product suggestions failed.', [
+            'query' => $q,
+            'exception' => $e->getMessage(),
+        ]);
 
+        // Database fallback if Elasticsearch is unavailable.
         $products = Product::query()
             ->with('media')
             ->where(function ($query) use ($q) {
                 $query->where('title', 'like', "%{$q}%")
-                    ->orWhere('short_description', 'like', "%{$q}%");
+                    ->orWhere(
+                        'short_description',
+                        'like',
+                        "%{$q}%"
+                    );
             })
             ->latest('id')
             ->limit(5)
             ->get();
-
-        return response()->json([
-            'q' => $q,
-            'items' => $products->map(fn (Product $product) => [
-                'id' => $product->id,
-                'title' => $product->title,
-                'url' => $product->url(),
-                'image' => $product->image,
-                'price' => $product->formattedPrice(),
-            ])->values(),
-            'more_url' => route('shop.search', ['q' => $q]),
-        ]);
     }
+
+    return response()->json([
+        'q' => $q,
+        'items' => $products->map(fn (Product $product) => [
+            'id' => $product->id,
+            'title' => $product->title,
+            'url' => $product->url(),
+            'image' => $product->image,
+            'price' => $product->formattedPrice(),
+        ])->values(),
+        'more_url' => route('shop.search', ['q' => $q]),
+    ]);
+}
+
+/**
+ * Search products through Elasticsearch.
+ *
+ * Returns product IDs in relevance order and the total hit count.
+ */
+private function searchProductsInElasticsearch(
+    string $q,
+    int $offset,
+    int $size
+): array {
+    $config = config('services.elasticsearch');
+
+    $client = ClientBuilder::create()
+        ->setHosts([$config['host']])
+        ->setBasicAuthentication(
+            $config['username'],
+            $config['password']
+        )
+        ->setCABundle($config['ca'])
+        ->build();
+
+    $response = $client->search([
+        'index' => 'products_v1',
+        'body' => [
+            'from' => $offset,
+            'size' => $size,
+            'track_total_hits' => true,
+            'query' => [
+                'bool' => [
+                    'should' => [
+                        [
+                            'term' => [
+                                'title.keyword' => [
+                                    'value' => $q,
+                                    'boost' => 15,
+                                ],
+                            ],
+                        ],
+                        [
+                            'match_phrase' => [
+                                'title' => [
+                                    'query' => $q,
+                                    'boost' => 5,
+                                ],
+                            ],
+                        ],
+                        [
+                            'multi_match' => [
+                                'query' => $q,
+                                'fields' => [
+                                    'title^4',
+                                    'short_description^2',
+                                    'specifications',
+                                ],
+                                'type' => 'best_fields',
+                            ],
+                        ],
+                    ],
+                    'minimum_should_match' => 1,
+                ],
+            ],
+            'sort' => [
+                ['_score' => ['order' => 'desc']],
+                ['id' => ['order' => 'desc']],
+            ],
+        ],
+    ])->asArray();
+
+    $hits = $response['hits']['hits'] ?? [];
+    $totalData = $response['hits']['total'] ?? 0;
+
+    $total = is_array($totalData)
+        ? (int) ($totalData['value'] ?? 0)
+        : (int) $totalData;
+
+    return [
+        'ids' => array_values(array_map(
+            fn (array $hit) => (string) $hit['_id'],
+            $hits
+        )),
+        'total' => $total,
+    ];
+}
+
 }
