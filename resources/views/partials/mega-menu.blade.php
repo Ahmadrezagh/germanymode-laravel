@@ -51,7 +51,7 @@
                                             <a class="ork-mega-group-title" href="{{ route('shop.category', $child) }}">{{ $child->name }}</a>
                                             @if($child->children->isNotEmpty())
                                                 <div class="ork-mega-links">
-                                                    @foreach($child->children->take(12) as $grand)
+                                                    @foreach($child->children as $grand)
                                                         <a href="{{ route('shop.category', $grand) }}">{{ $grand->name }}</a>
                                                     @endforeach
                                                 </div>
