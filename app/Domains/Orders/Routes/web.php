@@ -12,4 +12,5 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('shop.cart.
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/orders/new', [OrderController::class, 'newest'])->name('orders.new');
     Route::get('/orders/done', [OrderController::class, 'done'])->name('orders.done');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });

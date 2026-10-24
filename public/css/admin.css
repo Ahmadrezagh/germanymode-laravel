@@ -165,6 +165,32 @@ button, input, select, textarea { font: inherit; }
   font-weight: 600;
 }
 
+/* Count badge in front of title: [84] آخرین سفارشات */
+.menu-link-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.menu-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #dd4b39;
+  color: #fff !important;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  order: -1; /* force badge before title even if DOM order changes */
+}
+tr.order-row-link:hover td { background: #f0f7ff; }
+
 .topbar {
   background: var(--a-top);
   border-bottom: 1px solid var(--a-border);

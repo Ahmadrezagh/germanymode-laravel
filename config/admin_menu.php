@@ -43,9 +43,9 @@ return [
             'title' => 'سفـارشات فروشگـاه',
             'icon' => 'orders',
             'items' => [
-                ['title' => 'آخرین سفارشات', 'route' => 'admin.orders.new'],
+                ['title' => 'آخرین سفارشات', 'route' => 'admin.orders.new', 'badge' => 'orders_new'],
                 ['title' => 'سفارشات انجام شده', 'route' => 'admin.orders.done'],
-                ['title' => 'واریزی کاربران', 'route' => 'admin.settings.settlements'],
+                ['title' => 'واریزی کاربران', 'route' => 'admin.settings.settlements', 'badge' => 'settlements_pending'],
             ],
         ],
         [

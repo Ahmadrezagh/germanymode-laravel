@@ -16,10 +16,8 @@
         <div class="panel-head">
             <h2>{{ $subtitle }}</h2>
             <form class="form-inline" method="get">
-                <input type="text" name="q" placeholder="جستجو فاکتور / کاربر" style="width:220px">
+                <input type="text" name="q" value="{{ $q ?? '' }}" placeholder="جستجو فاکتور / کاربر" style="width:220px">
                 <button class="btn btn-default" type="submit">جستجو</button>
-                <button class="btn btn-default" type="button">پرینت فاکتور</button>
-                <button class="btn btn-default" type="button">پرینت آدرس</button>
             </form>
         </div>
         <div class="panel-body table-wrap">
@@ -28,33 +26,39 @@
                 <tr>
                     <th>شماره</th>
                     <th>فاکتور</th>
-                    <th>تراکنش‌ها</th>
+                    <th>تاریخ</th>
                     <th>صورت حساب</th>
                     <th>کاربری-خریدار</th>
-                    @if($mode === 'new')
-                        <th>تایید</th>
-                        <th>ارسال</th>
-                        <th>عدم تایید</th>
-                        <th>حذف</th>
-                        <th>ویرایش</th>
-                    @else
-                        <th>عدم تایید</th>
-                    @endif
+                    <th>وضعیت</th>
                 </tr>
                 </thead>
                 <tbody>
                 @forelse($orders as $order)
-                    <tr>
-                        <td>{{ $order['id'] ?? '—' }}</td>
-                        <td>{{ $order['invoice'] ?? '—' }}</td>
-                        <td>—</td>
-                        <td>—</td>
-                        <td>{{ $order['user'] ?? '—' }}</td>
-                        <td colspan="5">—</td>
+                    <tr class="order-row-link" onclick="window.location='{{ route('admin.orders.show', $order) }}'" style="cursor:pointer">
+                        <td>{{ $order->id }}</td>
+                        <td>
+                            <a href="{{ route('admin.orders.show', $order) }}" onclick="event.stopPropagation()" style="color:#0b5ed7;font-weight:600">
+                                {{ $order->factor_no }}
+                            </a>
+                        </td>
+                        <td>{{ $order->purchased_at ?: '—' }}</td>
+                        <td>{{ number_format((int) $order->total_amount) }} تومان</td>
+                        <td>
+                            {{ $order->buyer_name ?: ($order->user?->fullName() ?: '—') }}
+                            @if($order->portal_id)
+                                <div style="font-size:11px;color:#888">{{ $order->portal_id }}</div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($order->is_shipped) ارسال‌شده
+                            @elseif($order->is_confirmed) تایید‌شده
+                            @else جدید
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10" style="text-align:center;color:#888;padding:28px">
+                        <td colspan="6" style="text-align:center;color:#888;padding:28px">
                             سفارشی ثبت نشده است.
                         </td>
                     </tr>
@@ -62,5 +66,8 @@
                 </tbody>
             </table>
         </div>
+        @if(method_exists($orders, 'links'))
+            <div class="pagination-wrap" style="padding:12px">{{ $orders->links('pagination.simple') }}</div>
+        @endif
     </div>
 @endsection

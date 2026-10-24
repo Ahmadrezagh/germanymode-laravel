@@ -12,6 +12,19 @@
     $tabTitle = trim($__env->yieldContent('tab', 'داشبورد'));
     $tabKey = request()->path();
     $menu = config('admin_menu.sections', []);
+    $menuBadges = [
+        'orders_new' => \App\Domains\Orders\Models\Order::query()
+            ->where(function ($q) {
+                $q->where('status', 'new')
+                    ->orWhere(function ($x) {
+                        $x->where('is_shipped', false)->where('status', '!=', 'done');
+                    });
+            })
+            ->count(),
+        'settlements_pending' => \App\Domains\Orders\Models\Settlement::query()
+            ->where('is_confirmed', false)
+            ->count(),
+    ];
 @endphp
 <div class="admin-shell">
     <div class="main-col">
@@ -66,7 +79,7 @@
                     if (($item['route'] ?? '') === 'admin.products.index' && request()->routeIs('admin.products.index', 'admin.products.edit')) $sectionOpen = true;
                     if (($item['route'] ?? '') === 'admin.shop.categories' && (request()->routeIs('admin.shop.categories') || request()->routeIs('admin.categories.*'))) $sectionOpen = true;
                     if (str_starts_with($item['route'] ?? '', 'admin.shop.') && request()->routeIs($item['route'])) $sectionOpen = true;
-                    if (($item['route'] ?? '') === 'admin.orders.new' && request()->routeIs('admin.orders.new')) $sectionOpen = true;
+                    if (($item['route'] ?? '') === 'admin.orders.new' && request()->routeIs('admin.orders.new', 'admin.orders.show')) $sectionOpen = true;
                     if (($item['route'] ?? '') === 'admin.orders.done' && request()->routeIs('admin.orders.done')) $sectionOpen = true;
                     if (($item['route'] ?? '') === 'admin.users.index' && request()->routeIs('admin.users.*')) $sectionOpen = true;
                     if (($item['route'] ?? '') === 'admin.settings' && request()->routeIs('admin.settings')) $sectionOpen = true;
@@ -111,6 +124,10 @@
                                 'android' => '▶',
                             ];
                         @endphp
+                        @php
+                            $badgeKey = $item['badge'] ?? null;
+                            $badgeCount = $badgeKey ? (int) ($menuBadges[$badgeKey] ?? 0) : 0;
+                        @endphp
                         <a href="{{ $href }}"
                            class="{{ $active ? 'active' : '' }} {{ !empty($item['icon']) ? 'shop-link' : '' }}"
                            data-tab-link
@@ -118,7 +135,12 @@
                             @if(!empty($item['icon']))
                                 <span class="submenu-ico" style="background:{{ $item['color'] ?? '#3c8dbc' }}">{{ $itemIcons[$item['icon']] ?? '•' }}</span>
                             @endif
-                            <span>{{ $item['title'] }}</span>
+                            <span class="menu-link-label">
+                                @if($badgeCount > 0)
+                                    <span class="menu-count-badge">{{ number_format($badgeCount) }}</span>
+                                @endif
+                                <span class="menu-link-title">{{ $item['title'] }}</span>
+                            </span>
                         </a>
                     @endforeach
                 </div>

@@ -17,6 +17,8 @@ class Settlement extends Model
             'is_confirmed' => 'boolean',
             'is_seen' => 'boolean',
             'paid_at' => 'datetime',
+            'meta' => 'array',
+            'amount' => 'integer',
         ];
     }
 
